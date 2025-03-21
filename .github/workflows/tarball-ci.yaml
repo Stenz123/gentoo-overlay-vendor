@@ -24,7 +24,7 @@ jobs:
           sudo apt -y install golang-go npm wget tar xz-utils bzip2
 
       - name: Run make_modcache script
-        run: ./make_modcache.sh ${{ matrix.PN }} ${{ matrix.PV }} ${{ matrix.SRC_URI }} ${{ matrix.S }}
+        run:  chmod +x ./make_modcache.sh && ./make_modcache.sh ${{ matrix.PN }} ${{ matrix.PV }} ${{ matrix.SRC_URI }} ${{ matrix.S }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
