@@ -43,9 +43,9 @@ jobs:
         with:
           name: dep-archives
           path: dep-archives/
-
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "${{ matrix.PN }}-${{ matrix.PV }}"
-          body_path: dep-archives/
+          files: dep-archives/*.tar.xz
+          body: "Dependencies archive for ${{ matrix.PN }}-${{ matrix.PV }}"
