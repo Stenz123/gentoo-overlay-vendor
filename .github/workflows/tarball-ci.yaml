@@ -3,7 +3,7 @@ name: Build tarballs
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   make_modcache:
