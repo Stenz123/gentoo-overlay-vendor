@@ -15,7 +15,6 @@ PN="${1}"
 PV="${2}"
 SRC_URI="${3}"
 P="${PN}-${PV}"
-S="${4:-${P}}"
 
 tmpdir="$(mktemp -d)"
 archivedir="${PWD}/dep-archives"
@@ -32,6 +31,10 @@ eval "file=\$(basename \"${SRC_URI}\")"
 
 info "Extracting source"
 tar -xf "${file}" || die
+
+echo $(ls -lah)
+S=$(tar -tf "${file}" | head -1 | cut -d/ -f1)
+info "Detected source directory: ${S}"
 
 pushd "${S}" || die "pushd ${S} failed"
 info "Downloading modcache"
