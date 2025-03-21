@@ -16,30 +16,30 @@ jobs:
             PV: "0.40.10"
             SRC_URI: "https://github.com/derailed/k9s/archive/v0.40.10.tar.gz"
     steps:
-      - uses: mukunku/tag-exists-action@v1.6.0
-        id: check-tag
-        with: 
-          tag: "${{ matrix.PN }}-${{ matrix.PV }}"
+      #- uses: mukunku/tag-exists-action@v1.6.0
+      #  id: check-tag
+      #  with: 
+      #    tag: "${{ matrix.PN }}-${{ matrix.PV }}"
 
       - run: echo "Tag exists!"
-        if: steps.check-tag.outputs.exists == 'false' 
+      #  if: steps.check-tag.outputs.exists == 'false' 
       
       - name: Checkout repository
-        if: steps.check-tag.outputs.exists == 'false' 
+      #  if: steps.check-tag.outputs.exists == 'false' 
         uses: actions/checkout@v3
 
       - name: Install dependencies
-        if: steps.check-tag.outputs.exists == 'false' 
+      #  if: steps.check-tag.outputs.exists == 'false' 
         run: |
           sudo apt update
           sudo apt -y install golang-go npm wget tar xz-utils bzip2
 
       - name: Run make_modcache script
-        if: steps.check-tag.outputs.exists == 'false' 
+      #  if: steps.check-tag.outputs.exists == 'false' 
         run:  chmod +x ./make_modcache.sh && ./make_modcache.sh ${{ matrix.PN }} ${{ matrix.PV }} ${{ matrix.SRC_URI }} ${{ matrix.S }}
 
       - name: Release
-        if: steps.check-tag.outputs.exists == 'false' 
+      #  if: steps.check-tag.outputs.exists == 'false' 
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "${{ matrix.PN }}-${{ matrix.PV }}"
