@@ -27,7 +27,7 @@ jobs:
         run: ./make_modcache.sh ${{ matrix.PN }} ${{ matrix.PV }} ${{ matrix.SRC_URI }} ${{ matrix.S }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dep-archives
           path: dep-archives/
@@ -40,7 +40,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dep-archives
           path: dep-archives/
