@@ -1,0 +1,52 @@
+name: Build tarballs
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  make_modcache:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - PN: "k9scli"
+            PV: "0.40.10"
+            SRC_URI: "https://github.com/derailed/k9s/archive/v0.40.10.tar.gz"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt -y install golang-go npm wget tar xz-utils bzip2
+
+      - name: Run make_modcache script
+        run: ./make_modcache.sh ${{ matrix.PN }} ${{ matrix.PV }} ${{ matrix.SRC_URI }} ${{ matrix.S }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dep-archives
+          path: dep-archives/
+
+  deploy-package-registry:
+    runs-on: ubuntu-latest
+    needs: [make_modcache]
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dep-archives
+          path: dep-archives/
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "${{ matrix.PN }}-${{ matrix.PV }}"
+          body_path: dep-archives/
